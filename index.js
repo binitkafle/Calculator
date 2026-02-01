@@ -41,3 +41,13 @@ numberButtons.forEach((button) => {
     updateDisplay();
   });
 });
+// Handle decimal point
+function handleDecimal() {
+  if (shouldResetDisplay) {
+    currentValue = "0.";
+    shouldResetDisplay = false;
+  } else if (!currentValue.includes(".")) {
+    currentValue += ".";
+  }
+  updateDisplay();
+}
