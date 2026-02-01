@@ -6,7 +6,9 @@ let shouldResetDisplay = false;
 let lastPressedEquals = false;
 
 // Get DOM elements
-const displayCurrent = document.querySelector(".display-current");
+const displayCurrent =
+  document.querySelector(".display-current") ||
+  document.querySelector(".display");
 const displayPrevious = document.querySelector(".display-previous");
 const numberButtons = document.querySelectorAll("[data-number]");
 const operatorButtons = document.querySelectorAll("[data-action]");
@@ -18,8 +20,12 @@ function init() {
 
 // Update display
 function updateDisplay() {
-  displayCurrent.textContent = formatDisplay(currentValue);
-  displayPrevious.textContent = formatPrevious();
+  if (displayCurrent) {
+    displayCurrent.textContent = formatDisplay(currentValue);
+  }
+  if (displayPrevious) {
+    displayPrevious.textContent = formatPrevious();
+  }
 }
 
 function formatDisplay(value) {
@@ -60,18 +66,15 @@ numberButtons.forEach((button) => {
     resetIfError();
     const number = button.dataset.number;
 
-    if (shouldResetDisplay) {
+    if (shouldResetDisplay || currentValue === "0" || lastPressedEquals) {
       currentValue = number;
       shouldResetDisplay = false;
-      lastPressedEquals = false;
-    } else {
-      if (currentValue === "0") {
-        currentValue = number;
-      } else {
-        if (currentValue.replace("-", "").length < 12) {
-          currentValue += number;
-        }
+      if (lastPressedEquals) {
+        previousValue = null;
       }
+      lastPressedEquals = false;
+    } else if (currentValue.replace("-", "").length < 12) {
+      currentValue += number;
     }
 
     updateDisplay();
@@ -139,22 +142,17 @@ function calculate(a, b, op) {
 function handleOperator(op) {
   resetIfError();
 
-  if (lastPressedEquals) {
-    previousValue = currentValue;
-    lastPressedEquals = false;
-  }
-
-  if (previousValue === null) {
-    previousValue = currentValue;
-    operation = op;
-    shouldResetDisplay = true;
-  } else if (operation && !shouldResetDisplay) {
+  if (operation && !shouldResetDisplay) {
     const result = calculate(previousValue, currentValue, operation);
     currentValue = result.toString();
     previousValue = currentValue;
-    operation = op;
-    shouldResetDisplay = true;
+  } else if (previousValue === null) {
+    previousValue = currentValue;
   }
+
+  operation = op;
+  shouldResetDisplay = true;
+  lastPressedEquals = false;
   updateDisplay();
 }
 
@@ -162,7 +160,8 @@ function handleOperator(op) {
 function handleEquals() {
   resetIfError();
   if (operation && previousValue !== null) {
-    const result = calculate(previousValue, currentValue, operation);
+    const secondValue = shouldResetDisplay ? previousValue : currentValue;
+    const result = calculate(previousValue, secondValue, operation);
     currentValue = result.toString();
     previousValue = null;
     operation = null;
