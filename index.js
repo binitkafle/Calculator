@@ -121,7 +121,7 @@ function handleEquals() {
     updateDisplay();
   }
 }
-/ Event listeners for operators and functions
+// Event listeners for operators and functions
 operatorButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const action = button.dataset.action;
@@ -150,4 +150,38 @@ operatorButtons.forEach((button) => {
         break;
     }
   });
+});
+
+// Keyboard support
+document.addEventListener("keydown", (e) => {
+  if (e.key >= "0" && e.key <= "9") {
+    const btn = document.querySelector(`[data-number="${e.key}"]`);
+    if (btn) btn.click();
+  } else if (e.key === ".") {
+    const btn = document.querySelector('[data-action="decimal"]');
+    if (btn) btn.click();
+  } else if (e.key === "Enter" || e.key === "=") {
+    e.preventDefault();
+    const btn = document.querySelector('[data-action="equals"]');
+    if (btn) btn.click();
+  } else if (e.key === "Escape" || e.key === "c" || e.key === "C") {
+    const btn = document.querySelector('[data-action="clear"]');
+    if (btn) btn.click();
+  } else if (e.key === "+") {
+    const btn = document.querySelector('[data-action="add"]');
+    if (btn) btn.click();
+  } else if (e.key === "-") {
+    const btn = document.querySelector('[data-action="subtract"]');
+    if (btn) btn.click();
+  } else if (e.key === "*") {
+    const btn = document.querySelector('[data-action="multiply"]');
+    if (btn) btn.click();
+  } else if (e.key === "/") {
+    e.preventDefault();
+    const btn = document.querySelector('[data-action="divide"]');
+    if (btn) btn.click();
+  } else if (e.key === "%") {
+    const btn = document.querySelector('[data-action="percent"]');
+    if (btn) btn.click();
+  }
 });
