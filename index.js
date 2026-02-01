@@ -21,3 +21,23 @@ function updateDisplay() {
 
 // Initialize on page load
 init();
+
+// Handle number button clicks
+numberButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const number = button.dataset.number;
+
+    if (shouldResetDisplay) {
+      currentValue = number;
+      shouldResetDisplay = false;
+    } else {
+      if (currentValue === "0") {
+        currentValue = number;
+      } else {
+        currentValue += number;
+      }
+    }
+
+    updateDisplay();
+  });
+});
