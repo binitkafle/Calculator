@@ -93,7 +93,7 @@ function handleDecimal() {
   updateDisplay();
 }
 
-//Clear calculator
+//Clear calculators
 function clear() {
   currentValue = "0";
   previousValue = null;
