@@ -103,7 +103,7 @@ function clear() {
   updateDisplay();
 }
 
-// Handle percentage
+// Handle percentage logic
 function handlePercent() {
   resetIfError();
   currentValue = (parseFloat(currentValue) / 100).toString();
