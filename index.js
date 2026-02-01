@@ -93,3 +93,19 @@ function calculate(a, b, op) {
       return num2;
   }
 }
+
+// Handle operator
+function handleOperator(op) {
+  if (previousValue === null) {
+    previousValue = currentValue;
+    operation = op;
+    shouldResetDisplay = true;
+  } else if (operation) {
+    const result = calculate(previousValue, currentValue, operation);
+    currentValue = result.toString();
+    previousValue = currentValue;
+    operation = op;
+    shouldResetDisplay = true;
+    updateDisplay();
+  }
+}
