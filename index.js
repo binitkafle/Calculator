@@ -74,3 +74,22 @@ function handleNegate() {
     updateDisplay();
   }
 }
+
+// Perform calculation
+function calculate(a, b, op) {
+  const num1 = parseFloat(a);
+  const num2 = parseFloat(b);
+
+  switch (op) {
+    case "add":
+      return num1 + num2;
+    case "subtract":
+      return num1 - num2;
+    case "multiply":
+      return num1 * num2;
+    case "divide":
+      return num2 !== 0 ? num1 / num2 : "Error";
+    default:
+      return num2;
+  }
+}
