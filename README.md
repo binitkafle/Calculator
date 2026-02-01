@@ -14,3 +14,7 @@ A sleek, modern calculator built with HTML, CSS, and JavaScript featuring a beau
 - 💯 Percentage calculations
 - ➕➖ Positive/negative number toggle
 - 🔢 Decimal point support
+
+## Usage
+
+Simply open `index.html` in your web browser to start using the calculator.
