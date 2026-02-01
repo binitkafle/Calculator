@@ -18,3 +18,12 @@ A sleek, modern calculator built with HTML, CSS, and JavaScript featuring a beau
 ## Usage
 
 Simply open `index.html` in your web browser to start using the calculator.
+
+### Keyboard Shortcuts
+
+- **Numbers**: 0-9
+- **Operations**: +, -, \*, /
+- **Decimal**: .
+- **Equals**: Enter or =
+- **Clear**: Escape or C
+- **Percentage**: %
