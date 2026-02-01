@@ -109,3 +109,15 @@ function handleOperator(op) {
     updateDisplay();
   }
 }
+
+// Handle equals
+function handleEquals() {
+  if (operation && previousValue !== null) {
+    const result = calculate(previousValue, currentValue, operation);
+    currentValue = result.toString();
+    previousValue = null;
+    operation = null;
+    shouldResetDisplay = true;
+    updateDisplay();
+  }
+}
