@@ -3,9 +3,11 @@ let currentValue = "0";
 let previousValue = null;
 let operation = null;
 let shouldResetDisplay = false;
+let lastPressedEquals = false;
 
 // Get DOM elements
-const display = document.querySelector(".display");
+const displayCurrent = document.querySelector(".display-current");
+const displayPrevious = document.querySelector(".display-previous");
 const numberButtons = document.querySelectorAll("[data-number]");
 const operatorButtons = document.querySelectorAll("[data-action]");
 
@@ -16,7 +18,37 @@ function init() {
 
 // Update display
 function updateDisplay() {
-  display.textContent = currentValue;
+  displayCurrent.textContent = formatDisplay(currentValue);
+  displayPrevious.textContent = formatPrevious();
+}
+
+function formatDisplay(value) {
+  if (value === "Error") return value;
+  const [integer, decimal] = value.split(".");
+  const formattedInt = Number(integer).toLocaleString("en-US", {
+    maximumFractionDigits: 0,
+  });
+  return decimal !== undefined ? `${formattedInt}.${decimal}` : formattedInt;
+}
+
+function formatPrevious() {
+  if (previousValue === null || operation === null) return "";
+  const symbolMap = {
+    add: "+",
+    subtract: "−",
+    multiply: "×",
+    divide: "÷",
+  };
+  return `${formatDisplay(previousValue)} ${symbolMap[operation]}`;
+}
+
+function resetIfError() {
+  if (currentValue === "Error") {
+    currentValue = "0";
+    previousValue = null;
+    operation = null;
+    shouldResetDisplay = false;
+  }
 }
 
 // Initialize on page load
@@ -25,16 +57,20 @@ init();
 // Handle number button clicks
 numberButtons.forEach((button) => {
   button.addEventListener("click", () => {
+    resetIfError();
     const number = button.dataset.number;
 
     if (shouldResetDisplay) {
       currentValue = number;
       shouldResetDisplay = false;
+      lastPressedEquals = false;
     } else {
       if (currentValue === "0") {
         currentValue = number;
       } else {
-        currentValue += number;
+        if (currentValue.replace("-", "").length < 12) {
+          currentValue += number;
+        }
       }
     }
 
@@ -43,9 +79,11 @@ numberButtons.forEach((button) => {
 });
 // Handle decimal point
 function handleDecimal() {
+  resetIfError();
   if (shouldResetDisplay) {
     currentValue = "0.";
     shouldResetDisplay = false;
+    lastPressedEquals = false;
   } else if (!currentValue.includes(".")) {
     currentValue += ".";
   }
@@ -58,17 +96,20 @@ function clear() {
   previousValue = null;
   operation = null;
   shouldResetDisplay = false;
+  lastPressedEquals = false;
   updateDisplay();
 }
 
 // Handle percentage
 function handlePercent() {
+  resetIfError();
   currentValue = (parseFloat(currentValue) / 100).toString();
   updateDisplay();
 }
 
 // Handle negate
 function handleNegate() {
+  resetIfError();
   if (currentValue !== "0") {
     currentValue = (parseFloat(currentValue) * -1).toString();
     updateDisplay();
@@ -96,28 +137,37 @@ function calculate(a, b, op) {
 
 // Handle operator
 function handleOperator(op) {
+  resetIfError();
+
+  if (lastPressedEquals) {
+    previousValue = currentValue;
+    lastPressedEquals = false;
+  }
+
   if (previousValue === null) {
     previousValue = currentValue;
     operation = op;
     shouldResetDisplay = true;
-  } else if (operation) {
+  } else if (operation && !shouldResetDisplay) {
     const result = calculate(previousValue, currentValue, operation);
     currentValue = result.toString();
     previousValue = currentValue;
     operation = op;
     shouldResetDisplay = true;
-    updateDisplay();
   }
+  updateDisplay();
 }
 
 // Handle equals
 function handleEquals() {
+  resetIfError();
   if (operation && previousValue !== null) {
     const result = calculate(previousValue, currentValue, operation);
     currentValue = result.toString();
     previousValue = null;
     operation = null;
     shouldResetDisplay = true;
+    lastPressedEquals = true;
     updateDisplay();
   }
 }

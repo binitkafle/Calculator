@@ -3,12 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>calculator</title>
+    <title>Calculator</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="index.js" defer></script>
   </head>
   <body>
     <div class="container">
       <div class="calculator">
-        <div class="display">0</div>
+        <div class="display" aria-live="polite">
+          <div class="display-previous"></div>
+          <div class="display-current">0</div>
+        </div>
         <div class="buttons">
           <button class="btn function" data-action="clear">AC</button>
           <button class="btn function" data-action="negate">+/-</button>
