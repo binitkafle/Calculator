@@ -121,3 +121,33 @@ function handleEquals() {
     updateDisplay();
   }
 }
+/ Event listeners for operators and functions
+operatorButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const action = button.dataset.action;
+
+    switch (action) {
+      case "clear":
+        clear();
+        break;
+      case "negate":
+        handleNegate();
+        break;
+      case "percent":
+        handlePercent();
+        break;
+      case "decimal":
+        handleDecimal();
+        break;
+      case "equals":
+        handleEquals();
+        break;
+      case "add":
+      case "subtract":
+      case "multiply":
+      case "divide":
+        handleOperator(action);
+        break;
+    }
+  });
+});
