@@ -51,3 +51,26 @@ function handleDecimal() {
   }
   updateDisplay();
 }
+
+//Clear calculator
+function clear() {
+  currentValue = "0";
+  previousValue = null;
+  operation = null;
+  shouldResetDisplay = false;
+  updateDisplay();
+}
+
+// Handle percentage
+function handlePercent() {
+  currentValue = (parseFloat(currentValue) / 100).toString();
+  updateDisplay();
+}
+
+// Handle negate
+function handleNegate() {
+  if (currentValue !== "0") {
+    currentValue = (parseFloat(currentValue) * -1).toString();
+    updateDisplay();
+  }
+}
